@@ -11,7 +11,12 @@ const initialState = {
 export const gantiKategoriAsync = createAsyncThunk(
   'news/fetchCategoryList',
   async (kategori) => {
-    const hasil = await axios.get(`${DefaulUrl}&categories=${kategori}`);
+    let hasil = [];
+    if(kategori!==''){
+      hasil = await axios.get(`${DefaulUrl}&categories=${kategori}`);
+    }else{
+      hasil = await axios.get(`${DefaulUrl}`);
+    }
     return hasil.data;
   }
 );
@@ -65,8 +70,8 @@ export const NewsSlice = createSlice({
 
 export const { dataFilter } = NewsSlice.actions;
 
-export const selectPesanC = (state) => state.productcs.pesanC;
-export const selectPensanN = (state) => state.productcs.pesanN;
-export const news = (state) => state.productcs.newsList;
+export const selectPesanC = (state) => state.news.pesanC;
+export const selectPensanN = (state) => state.news.pesanN;
+export const news = (state) => state.news.newsList;
 
 export default NewsSlice.reducer;

@@ -1,90 +1,34 @@
 import './App.css';
 import * as React from 'react';
-import { Box, AppBar, Toolbar, IconButton, Typography, Grid } from '@mui/material';
-import { ExitToApp, AccountCircle } from '@mui/icons-material';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { auth } from './config/firebase';
-import { gantiKategoriAsync } from './features/NewsSlice';
-import { useDispatch } from 'react-redux';
+import Navbar from './components/Navbar';
+import Container from '@mui/material/Container';
+import { Outlet } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
+import Home from './containers/Home';
+import Detail from './containers/Detail';
 
-const pages = ['General', 'Business', 'Entertainment', 'Health', 'Science', 'Sports', 'Technology'];
-
-function App() {
-  const [user] = useAuthState(auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const onLogout = async () => {
-    try {
-        await signOut(auth);
-        navigate("/login");
-    } catch (err) {
-        console.log(err);
-    }
-  };
-  
+function App() {  
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar component="nav" sx={{ backgroundColor: '#61758b' }}>
-        <Toolbar>
-          <Grid container>
-          <Grid item xs={11} sx={{mt: 1}}>
-            <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                href="/"
-                sx={{
-                    //flexGrow: 1,
-                    display: 'inline',
-                    fontFamily: 'monospace',
-                    fontWeight: 700,
-                    color: 'inherit',
-                    textDecoration: 'none',
-                }}
-            >
-              NEWS PORTAL
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-              {pages.map((page) => (
-                  <Typography key={page} textAlign="center" onClick={() => dispatch(gantiKategoriAsync(page.toLowerCase()))}>{page}</Typography>
-              ))}
-            </Box>
-            
-          </Grid>
-          <Grid item xs={1} align='right'>
-            <IconButton
-                size="large"
-                color="inherit"
-            >
-              {user ? <ExitToApp /> : <AccountCircle />}
-            </IconButton>
-
-            {user ? (
-              <div>
-                  {user.email}
-                  <IconButton
-                      size="large"
-                      onClick={onLogout}
-                      color="inherit"
-                  >
-                      <ExitToApp />
-                  </IconButton>
-              </div>
-            ) : ''}
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <div className="App">
+      <Navbar />
+      <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/detail" element={<Detail />} />
+            {/* <Route path="private" element={
+              <ProtectedRoute>
+                <div>ini rahasia</div>
+              </ProtectedRoute>} />
+              <Route path="login" element={
+                <ProtectedRoute loginOnly={false}>
+                  <Login />
+                </ProtectedRoute>} />
+              <Route path="register" element={
+                <ProtectedRoute loginOnly={false}>
+                  <Register />
+                </ProtectedRoute>} />
+              <Route path="*" element={<NoMatch />} /> */}
+        </Routes>
+    </div>
   );
 }
 

@@ -5,29 +5,14 @@ import App from './App';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />} />
-            {/* <Route path="private" element={
-              <ProtectedRoute>
-                <div>ini rahasia</div>
-              </ProtectedRoute>} />
-              <Route path="login" element={
-                <ProtectedRoute loginOnly={false}>
-                  <Login />
-                </ProtectedRoute>} />
-              <Route path="register" element={
-                <ProtectedRoute loginOnly={false}>
-                  <Register />
-                </ProtectedRoute>} />
-              <Route path="*" element={<NoMatch />} /> */}
-        </Routes>
+        <App />
       </BrowserRouter>
       </Provider>
   </React.StrictMode>
