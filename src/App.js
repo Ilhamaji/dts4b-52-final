@@ -1,16 +1,19 @@
 import './App.css';
 import * as React from 'react';
-import { Box, AppBar, Toolbar, IconButton, Typography, Grid, Menu, MenuItem } from '@mui/material';
+import { Box, AppBar, Toolbar, IconButton, Typography, Grid } from '@mui/material';
 import { ExitToApp, AccountCircle } from '@mui/icons-material';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from './config/firebase';
+import { gantiKategoriAsync } from './features/NewsSlice';
+import { useDispatch } from 'react-redux';
 
-const pages = ['General', 'Business', 'Entertainment', 'Health', 'Science', 'Sport', 'Technology'];
+const pages = ['General', 'Business', 'Entertainment', 'Health', 'Science', 'Sports', 'Technology'];
 
 function App() {
   const [user] = useAuthState(auth);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -52,7 +55,7 @@ function App() {
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
               {pages.map((page) => (
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography key={page} textAlign="center" onClick={() => dispatch(gantiKategoriAsync(page.toLowerCase()))}>{page}</Typography>
               ))}
             </Box>
             
