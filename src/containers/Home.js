@@ -1,10 +1,13 @@
-import { Box, Backdrop, CircularProgress, Typography } from '@mui/material';
+import { Box, Grid, CircularProgress, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { news } from '../features/NewsSlice';
+import MainHome from '../components/MainHome';
+import LeftHome from '../components/LeftHome';
+import RightHome from '../components/RightHome';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { gantiKategoriAsync } from '../features/NewsSlice';
+import { getNewsAsync } from '../features/NewsSlice';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -13,20 +16,27 @@ const Home = () => {
   
   useEffect(() => {
     if(!newsData.data){
-      dispatch(gantiKategoriAsync(''));
+      dispatch(getNewsAsync(''));
     }
   }, []);
 
   return (
     <Box sx={{ margin: 10 }}>
-      Welcome to Mood Meter! <br/>
-      {!newsData.data ? <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop> : newsData.data.map((article) => (
-                  <Typography key={article.id} textAlign="center" onClick={() => console.log("test")/* handleClick(article.id) */ }>{article.title}</Typography>
-              ))}
+      <Grid container spacing={2}>
+        <Grid item xs={3}>
+          <LeftHome />
+        </Grid>
+        <Grid item xs={6}>
+          <MainHome />
+        </Grid>
+        <Grid item xs={3}>
+          <RightHome />
+        </Grid>
+      </Grid>
+      
+      {!newsData.data ? 'Loading...' : newsData.data.map((article) => (
+            <Typography key={article.id} textAlign="center" onClick={() => console.log("test")/* handleClick(article.id) */ }>{article.title}</Typography>
+        ))}
     </Box>
   )
 }
