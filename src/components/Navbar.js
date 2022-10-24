@@ -1,14 +1,37 @@
-import * as React from 'react';
-import { Box, AppBar, Toolbar, IconButton, Typography, Grid } from '@mui/material';
-import { ExitToApp, AccountCircle } from '@mui/icons-material';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../config/firebase';
-import { useDispatch } from 'react-redux';
+import * as React from "react";
+import { useState } from "react";
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Grid,
+} from "@mui/material";
+import { ExitToApp, AccountCircle } from "@mui/icons-material";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../config/firebase";
+import { useDispatch } from "react-redux";
+import Container from "@mui/material/Container";
+import CloseIcon from "@mui/icons-material/Close";
+import MenuIcon from "@mui/icons-material/Menu";
+import List from "@mui/material/List";
+import Collapse from "@mui/material/Collapse";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 //import { getNewsAsync } from '../features/NewsSlice';
 
-const pages = ['General', 'Business', 'Entertainment', 'Health', 'Science', 'Sports', 'Technology'];
+const pages = [
+  "General",
+  "Business",
+  "Entertainment",
+  "Health",
+  "Science",
+  "Sports",
+  "Technology",
+];
 
 function Navbar() {
   const [user] = useAuthState(auth);
@@ -18,7 +41,7 @@ function Navbar() {
   const onLogout = async () => {
     try {
       await signOut(auth);
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     } catch (err) {
       console.log(err);
     }
@@ -27,54 +50,110 @@ function Navbar() {
   const handleClick = (x) => {
     //dispatch(getNewsAsync('&categories=' + x.toLowerCase()))
   };
-  
+
+  const [open, setOpen] = useState(false);
+  const handleList = () => {
+    setOpen(!open);
+  };
+
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar component="nav" sx={{ backgroundColor: '#61758b' }}>
-        <Toolbar>
-          <Grid container>
-            <Grid item xs={11} sx={{mt: 1}}>
-              <Typography
-                  variant="h6"
+    <React.Fragment>
+      <Container fixed>
+        <Box sx={{ flexGrow: 1, marginTop: 2 }}>
+          <AppBar
+            sx={{
+              width: "100%",
+              backgroundColor: "transparent",
+              boxShadow: 0,
+            }}
+            position="static"
+          >
+            <Toolbar>
+              <Box
+                sx={{
+                  xs: "none",
+                  sm: "block",
+                }}
+              >
+                <Typography
                   noWrap
-                  component="a"
-                  href="/"
+                  component="div"
                   sx={{
-                      //flexGrow: 1,
-                      display: 'inline',
-                      fontFamily: 'monospace',
-                      fontWeight: 700,
-                      color: 'inherit',
-                      textDecoration: 'none',
+                    fontSize: "16px",
+                    backgroundColor: "#000",
+                    color: "irenhite",
+                    width: "WrapText",
+                    padding: 1,
+                    borderRadius: 1.5,
+                    display: "inline-flex",
+                    fontFamily: "Playfair Display",
                   }}
-              >
-                DTS NEWS PORTAL
-              </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                {pages.map((page) => (
-                    <Typography key={page} textAlign="center">{page}</Typography>
-                ))}
+                >
+                  News
+                </Typography>
+                <Typography
+                  noWrap
+                  component="div"
+                  sx={{
+                    marginLeft: 1,
+                    fontSize: "16px",
+                    color: "#000",
+                    display: "inline-flex",
+                    fontFamily: "Playfair Display",
+                  }}
+                >
+                  Portal
+                </Typography>
               </Box>
-              
-            </Grid>
-            <Grid item xs={1} align='right'>
-              {user ? <IconButton
-                  size="large"
-                  color="inherit"
-              >
-                <ExitToApp onClick={onLogout} />
-              </IconButton> : 
+              <IconButton sx={{ mr: 0, ml: "auto", color: "#000" }}>
+                {user ? (
+                  <IconButton size="large" color="inherit">
+                    <ExitToApp onClick={onLogout} />
+                  </IconButton>
+                ) : (
+                  <IconButton size="large" color="inherit">
+                    <AccountCircle
+                      onClick={() => navigate("/login", { replace: true })}
+                    />
+                  </IconButton>
+                )}
+              </IconButton>
               <IconButton
-                  size="large"
-                  color="inherit"
+                onClick={handleList}
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                sx={{ ml: 1, color: "#000" }}
               >
-                <AccountCircle onClick={() => navigate('/login', { replace: true }) } />
-              </IconButton>}
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
-    </Box>
+                {open ? <CloseIcon /> : <MenuIcon />}
+              </IconButton>
+            </Toolbar>
+            <List
+              sx={{
+                zIndex: "2",
+                with: "match-parent",
+                position: "relative",
+                bgcolor: "#000",
+                py: "0",
+              }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+            >
+              <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {pages.map((page) => (
+                    <ListItemButton onClick={() => handleClick(page)}>
+                      <ListItemText primary={page} onClick={handleList} />
+                    </ListItemButton>
+                  ))}
+                </List>
+              </Collapse>
+            </List>
+          </AppBar>
+        </Box>
+      </Container>
+    </React.Fragment>
   );
 }
 
