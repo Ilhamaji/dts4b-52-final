@@ -1,19 +1,16 @@
 import * as React from 'react';
-import { Box, AppBar, Toolbar, IconButton, Typography, Grid } from '@mui/material';
+import { Box, AppBar, Toolbar, IconButton, Typography, Grid, Button } from '@mui/material';
 import { ExitToApp, AccountCircle } from '@mui/icons-material';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, NavLink } from 'react-router-dom';
 import { auth } from '../config/firebase';
-import { useDispatch } from 'react-redux';
-//import { getNewsAsync } from '../features/NewsSlice';
 
 const pages = ['General', 'Business', 'Entertainment', 'Health', 'Science', 'Sports', 'Technology'];
 
 function Navbar() {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const onLogout = async () => {
     try {
@@ -25,7 +22,11 @@ function Navbar() {
   };
 
   const handleClick = (x) => {
-    //dispatch(getNewsAsync('&categories=' + x.toLowerCase()))
+    if(!user && x.toLowerCase()==='sports'){
+      alert("Please register or login!");
+    }else{
+      navigate('/category', { state: { section: x }, replace: true });
+    }
   };
   
   return (
@@ -38,7 +39,6 @@ function Navbar() {
                   variant="h6"
                   noWrap
                   component="a"
-                  href="/"
                   sx={{
                       //flexGrow: 1,
                       display: 'inline',
@@ -48,11 +48,15 @@ function Navbar() {
                       textDecoration: 'none',
                   }}
               >
-                DTS NEWS PORTAL
+                <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to="/">DTS NEWS PORTAL</Link>
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                 {pages.map((page) => (
-                    <Typography key={page} textAlign="center">{page}</Typography>
+                    <Button
+                      key={page}
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={() => handleClick(page)}>{page}</Button>
                 ))}
               </Box>
               

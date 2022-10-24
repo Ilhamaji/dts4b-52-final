@@ -11,6 +11,7 @@ const initialState = {
   statusRightB: "",
   statusPremiumMain: "",
   statusDetail: "",
+  statusCategory: "",
   mainNews: [],
   leftNews: [],
   leftNewsB: [],
@@ -18,6 +19,7 @@ const initialState = {
   rightNewsB: [],
   premiumMain: [],
   detail: [],
+  category: [],
 };
 
 export const getMainPremiumAsync = createAsyncThunk(
@@ -72,6 +74,14 @@ export const getDetailAsync = createAsyncThunk(
   'news/fetchDetail',
   async (apiUrl) => {
     const hasil = await axios.get(`${apiUrl}${OnlyKey}`);
+    return hasil.data;
+  }
+);
+
+export const getCategoryAsync = createAsyncThunk(
+  'news/fetchCategory',
+  async (category) => {
+    const hasil = await axios.get(`${DefaultUrl}&page-size=10&section=${category}&type=article`);
     return hasil.data;
   }
 );
@@ -173,7 +183,7 @@ export const NewsSlice = createSlice({
         state.premiumMain = action.payload.response;
       })
       
-      //premium home tengah atas
+      //detail
       .addCase(getDetailAsync.pending, (state) => {
         state.statusDetail = 'loading';
       })
@@ -183,6 +193,18 @@ export const NewsSlice = createSlice({
       .addCase(getDetailAsync.fulfilled, (state, action) => {
         state.statusDetail = 'idle';
         state.detail = action.payload.response;
+      })
+      
+      //category
+      .addCase(getCategoryAsync.pending, (state) => {
+        state.statusDetail = 'loading';
+      })
+      .addCase(getCategoryAsync.rejected, (state) => {
+        state.statusDetail = 'rejected';
+      })
+      .addCase(getCategoryAsync.fulfilled, (state, action) => {
+        state.statusDetail = 'idle';
+        state.category = action.payload;
       });
   },
 });
@@ -197,6 +219,7 @@ export const selectPensanRight = (state) => state.news.statusRight;
 export const selectPensanRightB = (state) => state.news.statusRightB;
 export const selectPesanMainPremium = (state) => state.news.statusPremiumMain;
 export const selectPesanDetail = (state) => state.news.statusDetail;
+export const selectPesanCategory = (state) => state.news.statusCategory;
 
 export const selectMainNews = (state) => state.news.mainNews;
 export const selectLeftNews = (state) => state.news.leftNews;
@@ -205,5 +228,6 @@ export const selectRightNews = (state) => state.news.rightNews;
 export const selectRightBNews = (state) => state.news.rightNewsB;
 export const selectMainPremium = (state) => state.news.premiumMain;
 export const selectDetail = (state) => state.news.detail;
+export const selectCategory = (state) => state.news.category;
 
 export default NewsSlice.reducer;

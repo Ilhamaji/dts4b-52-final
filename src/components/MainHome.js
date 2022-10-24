@@ -24,7 +24,7 @@ const MainHome = () => {
     }
   }, []);
 
-  const handlePremium = (x) => {
+  const handleDetail = (x) => {
     if(!user && x.sectionId==='sport'){
       alert("Please register or login!");
     }else{
@@ -37,7 +37,7 @@ const MainHome = () => {
       <h1>Sports News Premium</h1>
       {premiumData.results ? 
       <Card key={premiumData.results[0].id} sx={{ width: '100%', mb:1}}>
-        <CardActionArea onClick={() => {handlePremium(premiumData.results[0])}}>
+        <CardActionArea onClick={() => {handleDetail(premiumData.results[0])}}>
           <CardMedia
             component="img"
             height="300"
@@ -58,7 +58,7 @@ const MainHome = () => {
       <h2>TODAY</h2>
       {!newsData.response ? 'Loading..' : newsData.response.results.map((article) => (
         <Card key={article.id} sx={{ width: '100%', mb:1}}>
-          <CardActionArea onClick={() => {handlePremium(article)}}>
+          <CardActionArea onClick={() => {handleDetail(article)}}>
             <CardMedia
               component="img"
               height="200"
