@@ -6,7 +6,7 @@ import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../config/firebase';
 import { useDispatch } from 'react-redux';
-import { getNewsAsync } from '../features/NewsSlice';
+//import { getNewsAsync } from '../features/NewsSlice';
 
 const pages = ['General', 'Business', 'Entertainment', 'Health', 'Science', 'Sports', 'Technology'];
 
@@ -17,15 +17,15 @@ function Navbar() {
 
   const onLogout = async () => {
     try {
-        await signOut(auth);
+      await signOut(auth);
+      navigate('/', { replace: true });
     } catch (err) {
-        console.log(err);
+      console.log(err);
     }
   };
 
   const handleClick = (x) => {
-    /* navigate('/detail', { replace: true }); */
-    dispatch(getNewsAsync('&categories=' + x.toLowerCase()))
+    //dispatch(getNewsAsync('&categories=' + x.toLowerCase()))
   };
   
   return (
@@ -52,31 +52,24 @@ function Navbar() {
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                 {pages.map((page) => (
-                    <Typography key={page} textAlign="center" onClick={() => handleClick(page) }>{page}</Typography>
+                    <Typography key={page} textAlign="center">{page}</Typography>
                 ))}
               </Box>
               
             </Grid>
             <Grid item xs={1} align='right'>
+              {user ? <IconButton
+                  size="large"
+                  color="inherit"
+              >
+                <ExitToApp onClick={onLogout} />
+              </IconButton> : 
               <IconButton
                   size="large"
                   color="inherit"
               >
-                {user ? <ExitToApp /> : <AccountCircle />}
-              </IconButton>
-
-              {user ? (
-                <div>
-                    {user.email}
-                    <IconButton
-                        size="large"
-                        onClick={onLogout}
-                        color="inherit"
-                    >
-                        <ExitToApp />
-                    </IconButton>
-                </div>
-              ) : ''}
+                <AccountCircle onClick={() => navigate('/login', { replace: true }) } />
+              </IconButton>}
             </Grid>
           </Grid>
         </Toolbar>
