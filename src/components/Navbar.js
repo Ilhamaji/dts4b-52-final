@@ -1,22 +1,12 @@
 import * as React from 'react';
-import { Box, AppBar, Toolbar, IconButton, Typography, Grid } from '@mui/material';
+import { Box, AppBar, Toolbar, IconButton, Typography, Grid, Button } from '@mui/material';
 import { ExitToApp, AccountCircle } from '@mui/icons-material';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, NavLink } from 'react-router-dom';
 import { auth } from '../config/firebase';
-import { useDispatch } from 'react-redux';
-//import { getNewsAsync } from '../features/NewsSlice';
 
-const pages = [
-  "General",
-  "Business",
-  "Entertainment",
-  "Health",
-  "Science",
-  "Sports",
-  "Technology",
-];
+const pages = ['General', 'Business', 'Entertainment', 'Health', 'Science', 'Sports', 'Technology'];
 
 function Navbar() {
   const [user] = useAuthState(auth);
@@ -25,7 +15,7 @@ function Navbar() {
   const onLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/", { replace: true });
+      navigate('/', { replace: true });
     } catch (err) {
       console.log(err);
     }
@@ -38,115 +28,57 @@ function Navbar() {
       navigate('/category', { state: { section: x }, replace: true });
     }
   };
-
-  const [open, setOpen] = useState(false);
-  const handleList = () => {
-    setOpen(!open);
-  };
-
+  
   return (
-    <React.Fragment>
-      <Container fixed>
-        <Box sx={{ flexGrow: 1, marginTop: 2 }}>
-          <AppBar
-            sx={{
-              width: "100%",
-              backgroundColor: "transparent",
-              boxShadow: 0,
-            }}
-            position="static"
-          >
-            <Toolbar>
-              <Box
-                sx={{
-                  xs: "none",
-                  sm: "block",
-                }}
-              >
-                <Typography
-                  noWrap
-                  component="div"
-                  sx={{
-                    fontSize: "16px",
-                    backgroundColor: "#000",
-                    color: "irenhite",
-                    width: "WrapText",
-                    padding: 1,
-                    borderRadius: 1.5,
-                    display: "inline-flex",
-                    fontFamily: "Playfair Display",
-                  }}
-                >
-                  News
-                </Typography>
-                <Typography
+    <Box sx={{ display: 'flex' }}>
+      <AppBar component="nav" sx={{ backgroundColor: '#61758b' }}>
+        <Toolbar>
+          <Grid container>
+            <Grid item xs={11} sx={{mt: 1}}>
+              <Typography
+                  variant="h6"
                   noWrap
                   component="a"
-                  href="/"
                   sx={{
-                    marginLeft: 1,
-                    fontSize: "16px",
-                    color: "#000",
-                    display: "inline-flex",
-                    fontFamily: "Playfair Display",
+                      //flexGrow: 1,
+                      display: 'inline',
+                      fontFamily: 'monospace',
+                      fontWeight: 700,
+                      color: 'inherit',
+                      textDecoration: 'none',
                   }}
               >
-                DTS NEWS PORTAL
+                <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to="/">DTS NEWS PORTAL</Link>
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                 {pages.map((page) => (
-                    <Typography key={page} textAlign="center">{page}</Typography>
+                    <Button
+                      key={page}
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={() => handleClick(page)}>{page}</Button>
                 ))}
               </Box>
-              <IconButton sx={{ mr: 0, ml: "auto", color: "#000" }}>
-                {user ? (
-                  <IconButton size="large" color="inherit">
-                    <ExitToApp onClick={onLogout} />
-                  </IconButton>
-                ) : (
-                  <IconButton size="large" color="inherit">
-                    <AccountCircle
-                      onClick={() => navigate("/login", { replace: true })}
-                    />
-                  </IconButton>
-                )}
-              </IconButton>
-              <IconButton
-                onClick={handleList}
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                sx={{ ml: 1, color: "#000" }}
+              
+            </Grid>
+            <Grid item xs={1} align='right'>
+              {user ? <IconButton
+                  size="large"
+                  color="inherit"
               >
-                {open ? <CloseIcon /> : <MenuIcon />}
-              </IconButton>
-            </Toolbar>
-            <List
-              sx={{
-                zIndex: "2",
-                with: "match-parent",
-                position: "relative",
-                bgcolor: "#000",
-                py: "0",
-              }}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-            >
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  {pages.map((page) => (
-                    <ListItemButton onClick={() => handleClick(page)}>
-                      <ListItemText primary={page} onClick={handleList} />
-                    </ListItemButton>
-                  ))}
-                </List>
-              </Collapse>
-            </List>
-          </AppBar>
-        </Box>
-      </Container>
-    </React.Fragment>
+                <ExitToApp onClick={onLogout} />
+              </IconButton> : 
+              <IconButton
+                  size="large"
+                  color="inherit"
+              >
+                <AccountCircle onClick={() => navigate('/login', { replace: true }) } />
+              </IconButton>}
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }
 
