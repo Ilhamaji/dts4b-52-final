@@ -1,21 +1,28 @@
-import { 
+import {
   Box,
   Typography,
   Card,
   CardContent,
   CardMedia,
-  CardActionArea,} from '@mui/material';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../config/firebase';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { getNewsMainAsync, selectMainNews, getMainPremiumAsync, selectMainPremium } from '../features/NewsSlice';
+  CardActionArea,
+} from "@mui/material";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../config/firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  getNewsMainAsync,
+  selectMainNews,
+  getMainPremiumAsync,
+  selectMainPremium,
+} from "../features/NewsSlice";
 
 import Container from "@mui/material/Container";
 import LeftHome from "./LeftHome";
 import RightHome from "./RightHome";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const MainHome = () => {
   const dispatch = useDispatch();
@@ -23,22 +30,25 @@ const MainHome = () => {
   const [user] = useAuthState(auth);
   const newsData = useSelector(selectMainNews);
   const premiumData = useSelector(selectMainPremium);
-  
+
   useEffect(() => {
-    if(!newsData.response){
+    if (!newsData.response) {
       dispatch(getNewsMainAsync());
     }
-    
-    if(premiumData.length===0){
+
+    if (premiumData.length === 0) {
       dispatch(getMainPremiumAsync());
     }
   }, []);
 
   const handleDetail = (x) => {
-    if(!user && x.sectionId==='sport'){
+    if (!user && x.sectionId === "sport") {
       alert("Please register or login!");
-    }else{
-      navigate('/detail', { state: { articleId: x.id, section: x.sectionId, apiUrl: x.apiUrl }, replace: true });
+    } else {
+      navigate("/detail", {
+        state: { articleId: x.id, section: x.sectionId, apiUrl: x.apiUrl },
+        replace: true,
+      });
     }
   };
 
@@ -105,7 +115,7 @@ const MainHome = () => {
               </CardActionArea>
             </Card>
           ) : (
-            "Loading.."
+            <CircularProgress sx={{ color: "#000" }} />
           )}
         </Container>
       </Box>
@@ -129,40 +139,42 @@ const MainHome = () => {
         </Container>
 
         <Container sx={{ my: 2 }} fixed>
-          {!newsData.response
-            ? "Loading.."
-            : newsData.response.results.map((article) => (
-                <Card key={article.id} sx={responsive}>
-                  <CardActionArea
-                    onClick={() => {
-                      handleDetail(article);
-                    }}
-                    sx={{ bgcolor: "#000", color: "#fff" }}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="200"
-                      image={article.fields.thumbnail}
-                      alt={article.webTitle}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {article.webTitle}
-                      </Typography>
-                      <Typography variant="body2" color="#deddd9">
-                        {article.fields.trailText}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              ))}
+          {!newsData.response ? (
+            <CircularProgress sx={{ color: "#000" }} />
+          ) : (
+            newsData.response.results.map((article) => (
+              <Card key={article.id} sx={responsive}>
+                <CardActionArea
+                  onClick={() => {
+                    handleDetail(article);
+                  }}
+                  sx={{ bgcolor: "#000", color: "#fff" }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="200"
+                    image={article.fields.thumbnail}
+                    alt={article.webTitle}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {article.webTitle}
+                    </Typography>
+                    <Typography variant="body2" color="#deddd9">
+                      {article.fields.trailText}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            ))
+          )}
         </Container>
       </Box>
 
       <LeftHome />
       <RightHome />
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default MainHome
+export default MainHome;

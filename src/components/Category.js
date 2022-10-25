@@ -23,6 +23,7 @@ import {
 } from "../features/NewsSlice";
 
 import Container from "@mui/material/Container";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Category = () => {
   const navigate = useNavigate();
@@ -106,42 +107,44 @@ const Category = () => {
         </Container>
       </Container>
 
-      {categoryData.response
-        ? categoryData.response.results.map((cdata, index) => (
-            <Card
-              key={"cardkey-" + index}
-              sx={{
-                mx: 1,
-                display: "inline-flex",
-                maxWidth: 345,
-                bgcolor: "#000",
-                color: "#fff",
-                mb: 1,
+      {categoryData.response ? (
+        categoryData.response.results.map((cdata, index) => (
+          <Card
+            key={"cardkey-" + index}
+            sx={{
+              mx: 1,
+              display: "inline-flex",
+              maxWidth: 345,
+              bgcolor: "#000",
+              color: "#fff",
+              mb: 1,
+            }}
+          >
+            <CardActionArea
+              onClick={() => {
+                handlePremium(cdata);
               }}
             >
-              <CardActionArea
-                onClick={() => {
-                  handlePremium(cdata);
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="300"
-                  image={cdata.fields.thumbnail}
-                  alt={cdata.webTitle}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {cdata.webTitle}
-                  </Typography>
-                  <Typography variant="body2" color="#deddd9">
-                    {cdata.fields.trailText}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          ))
-        : ""}
+              <CardMedia
+                component="img"
+                height="300"
+                image={cdata.fields.thumbnail}
+                alt={cdata.webTitle}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {cdata.webTitle}
+                </Typography>
+                <Typography variant="body2" color="#deddd9">
+                  {cdata.fields.trailText}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        ))
+      ) : (
+        <CircularProgress sx={{ color: "#000" }} />
+      )}
     </Box>
   );
 };
