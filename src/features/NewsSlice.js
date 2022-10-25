@@ -104,7 +104,16 @@ export const NewsSlice = createSlice({
 
     // Use the PayloadAction type to declare the contents of `action.payload`
     sortCategory: (state, action) => {
-      state.status = action.payload;
+      let sorted = [];
+      const results = state.category.response.results;
+      if(action.payload==='asc'){
+        sorted = results.sort((a, b) => a.webTitle.localeCompare(b.webTitle));
+        //sorted = results.sort((a, b) => a.webTitle - b.webTitle);
+      }else{
+        sorted = results.sort((a, b) => b.webTitle.localeCompare(a.webTitle));
+        //sorted = results.sort((a, b) => b.webTitle - a.webTitle);
+      }
+      state.category.response.results = sorted;
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -209,7 +218,7 @@ export const NewsSlice = createSlice({
   },
 });
 
-export const { dataFilter } = NewsSlice.actions;
+export const { sortCategory } = NewsSlice.actions;
 
 export const selectPesanL = (state) => state.news.statusL;
 export const selectPensanM = (state) => state.news.statusM;

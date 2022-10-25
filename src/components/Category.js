@@ -1,12 +1,13 @@
 import { Box, ToggleButton, ToggleButtonGroup, Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import React from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebase';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { selectPesanCategory, selectCategory } from '../features/NewsSlice';
+import { selectPesanCategory, selectCategory, sortCategory } from '../features/NewsSlice';
 
 const Category = () => {
   const navigate = useNavigate();
@@ -16,29 +17,13 @@ const Category = () => {
   const [queryParams, setQueryParams] = useSearchParams();
   const categoryData = useSelector(selectCategory);
   const pesanCategory = useSelector(selectPesanCategory);
+  const [sortValue, setSortValue] = useState('');
   
-  useEffect(() => {    
+  useEffect(() => {
     if(!user && state.section.toLowerCase()==='sport'){
       alert("Please register or login!");
     }
   }, []);
-
-  useEffect(() => {
-    if (pesanCategory==='idle') return;
-    const sortMovies = (type) => {
-        if (type === 'asc') {
-            const sorted = [...movies].sort((a, b) => a.vote_average - b.vote_average);
-            setMovies(sorted);
-        }
-        if (type === 'desc') {
-            const sorted = [...movies].sort((a, b) => b.vote_average - a.vote_average);
-            setMovies(sorted);
-        }
-    }
-
-    sortMovies(queryParams.get('sort'));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [queryParams, moviesReady]);
 
   const handlePremium = (x) => {
     if(!user && x.sectionId==='sport'){
@@ -49,23 +34,28 @@ const Category = () => {
   };
 
   const setSortParam = (type) => {
+    setSortValue(type);
+    if(state){
+      queryParams.set("section", state.section);
+    }
     queryParams.set("sort", type);
     setQueryParams(queryParams);
+    dispatch(sortCategory(queryParams.get('sort')));
   }
 
   return (
-    <Box sx={{ mt: 10, mb: 5, ml:5, mr:5 }}>
-      <h1>{state.section} Page</h1>
+    <Box sx={{ mt: 20, mb: 5, ml:5, mr:5 }}>
+      <h1>{queryParams.get('section') ? queryParams.get('section') : (state.section ? state.section  : '')} Page</h1>
       <ToggleButtonGroup
         size="small"
         color="primary"
-        value={React.useState('web')}
+        value={sortValue}
         exclusive
         aria-label="Platform"
         sx={{ mb: 5 }}
       >
-        <ToggleButton value="web" onClick={() => setSortParam("asc")}>Asc</ToggleButton>
-        <ToggleButton value="android" onClick={() => setSortParam("desc")}>Desc</ToggleButton>
+        <ToggleButton value="asc" onClick={() => setSortParam("asc")}>Asc</ToggleButton>
+        <ToggleButton value="desc" onClick={() => setSortParam("desc")}>Desc</ToggleButton>
       </ToggleButtonGroup>
       <Masonry columns={4} spacing={2}>
         {categoryData.response ? categoryData.response.results.map((cdata, index) => (

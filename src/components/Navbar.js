@@ -28,7 +28,6 @@ function Navbar() {
     if(!user && x.toLowerCase()==='sports'){
       alert("Please register or login!");
     }else{
-      console.log('test');
       dispatch(getCategoryAsync(x.toLowerCase()));
       navigate('/category', { state: { section: x }, replace: true });
     }
