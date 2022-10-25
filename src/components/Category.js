@@ -32,7 +32,6 @@ const Category = () => {
   const dispatch = useDispatch();
   const [queryParams, setQueryParams] = useSearchParams();
   const categoryData = useSelector(selectCategory);
-  const pesanCategory = useSelector(selectPesanCategory);
   const [sortValue, setSortValue] = useState("");
 
   useEffect(() => {
