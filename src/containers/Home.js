@@ -6,21 +6,15 @@ import LeftHome from '../components/LeftHome';
 import RightHome from '../components/RightHome';
 import { useDispatch, useSelector } from 'react-redux';
 
+import Container from "@mui/material/Container";
+
 const Home = () => {
   return (
-    <Box sx={{ margin: 10 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <LeftHome />
-        </Grid>
-        <Grid item xs={6}>
-          <MainHome />
-        </Grid>
-        <Grid item xs={3}>
-          <RightHome />
-        </Grid>
-      </Grid>
-    </Box>
+    <Container fixed>
+      <MainHome />
+      <LeftHome />
+      <RightHome />
+    </Container>
   )
 }
 
