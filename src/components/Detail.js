@@ -72,6 +72,7 @@ const Detail = () => {
               <h1>{detailData.content.webTitle}</h1>
               <div
                 id="terms-content"
+                className="sesuaikansendiri"
                 dangerouslySetInnerHTML={{
                   __html: detailData.content.fields.body,
                 }}
