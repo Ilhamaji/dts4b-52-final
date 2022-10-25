@@ -8,7 +8,6 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import Masonry from "@mui/lab/Masonry";
 import React from "react";
 import { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -17,7 +16,6 @@ import { auth } from "../config/firebase";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import {
-  selectPesanCategory,
   selectCategory,
   sortCategory,
 } from "../features/NewsSlice";
