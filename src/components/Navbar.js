@@ -3,13 +3,16 @@ import { Box, AppBar, Toolbar, IconButton, Typography, Grid, Button } from '@mui
 import { ExitToApp, AccountCircle } from '@mui/icons-material';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
-import { useNavigate, Link, NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 import { auth } from '../config/firebase';
+import { getCategoryAsync } from '../features/NewsSlice';
 
-const pages = ['General', 'Business', 'Entertainment', 'Health', 'Science', 'Sports', 'Technology'];
+const pages = ['Business', 'Books', 'Environment', 'Fashion', 'Sports', 'Technology'];
 
 function Navbar() {
   const [user] = useAuthState(auth);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onLogout = async () => {
@@ -25,6 +28,8 @@ function Navbar() {
     if(!user && x.toLowerCase()==='sports'){
       alert("Please register or login!");
     }else{
+      console.log('test');
+      dispatch(getCategoryAsync(x.toLowerCase()));
       navigate('/category', { state: { section: x }, replace: true });
     }
   };

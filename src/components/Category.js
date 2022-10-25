@@ -1,28 +1,44 @@
 import { Box, ToggleButton, ToggleButtonGroup, Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebase';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getCategoryAsync, selectPesanCategory, selectCategory } from '../features/NewsSlice';
+import { selectPesanCategory, selectCategory } from '../features/NewsSlice';
 
 const Category = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {state} = useLocation();
   const [user] = useAuthState(auth);
+  const dispatch = useDispatch();
+  const [queryParams, setQueryParams] = useSearchParams();
   const categoryData = useSelector(selectCategory);
   const pesanCategory = useSelector(selectPesanCategory);
   
   useEffect(() => {    
     if(!user && state.section.toLowerCase()==='sport'){
       alert("Please register or login!");
-    }else{
-      dispatch(getCategoryAsync(state.section.toLowerCase()));
     }
   }, []);
+
+  useEffect(() => {
+    if (pesanCategory==='idle') return;
+    const sortMovies = (type) => {
+        if (type === 'asc') {
+            const sorted = [...movies].sort((a, b) => a.vote_average - b.vote_average);
+            setMovies(sorted);
+        }
+        if (type === 'desc') {
+            const sorted = [...movies].sort((a, b) => b.vote_average - a.vote_average);
+            setMovies(sorted);
+        }
+    }
+
+    sortMovies(queryParams.get('sort'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [queryParams, moviesReady]);
 
   const handlePremium = (x) => {
     if(!user && x.sectionId==='sport'){
@@ -32,11 +48,10 @@ const Category = () => {
     }
   };
 
-  const [alignment, setAlignment] = React.useState('web');
-
-  const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
-  };
+  const setSortParam = (type) => {
+    queryParams.set("sort", type);
+    setQueryParams(queryParams);
+  }
 
   return (
     <Box sx={{ mt: 10, mb: 5, ml:5, mr:5 }}>
@@ -44,15 +59,13 @@ const Category = () => {
       <ToggleButtonGroup
         size="small"
         color="primary"
-        value={alignment}
+        value={React.useState('web')}
         exclusive
-        //onChange={handleChange}
         aria-label="Platform"
         sx={{ mb: 5 }}
       >
-        <ToggleButton value="web">Asc</ToggleButton>
-        <ToggleButton value="android">Desc</ToggleButton>
-        <ToggleButton value="ios">Reset</ToggleButton>
+        <ToggleButton value="web" onClick={() => setSortParam("asc")}>Asc</ToggleButton>
+        <ToggleButton value="android" onClick={() => setSortParam("desc")}>Desc</ToggleButton>
       </ToggleButtonGroup>
       <Masonry columns={4} spacing={2}>
         {categoryData.response ? categoryData.response.results.map((cdata, index) => (
