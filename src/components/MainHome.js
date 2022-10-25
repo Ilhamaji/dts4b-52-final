@@ -39,7 +39,7 @@ const MainHome = () => {
     if (premiumData.length === 0) {
       dispatch(getMainPremiumAsync());
     }
-  }, []);
+  }, [newsData, premiumData, dispatch]);
 
   const handleDetail = (x) => {
     if (!user && x.sectionId === "sport") {

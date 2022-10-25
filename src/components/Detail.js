@@ -24,13 +24,13 @@ const Detail = () => {
   const detailData = useSelector(selectDetail);
   const pesanDetail = useSelector(selectPesanDetail);
 
+  dispatch(getDetailAsync(state.apiUrl));
+
   useEffect(() => {
-    if (!user && state.sectionId == "sport") {
+    if (!user && state.sectionId === "sport") {
       alert("Please register or login!");
     }
-
-    dispatch(getDetailAsync(state.apiUrl));
-  }, [user, dispatch]);
+  }, [user, dispatch, state]);
 
   return (
     <Container sx={{ textAlign: "left" }} fixed>

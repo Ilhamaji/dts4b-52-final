@@ -30,7 +30,7 @@ const RightHome = () => {
     if (!newsDataB.response) {
       dispatch(getNewsRightBAsync());
     }
-  }, []);
+  }, [newsData, newsDataB, dispatch]);
 
   return (
     <>

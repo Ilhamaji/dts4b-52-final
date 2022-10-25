@@ -6,7 +6,6 @@ import {
   Divider,
 } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
@@ -31,7 +30,7 @@ const LeftHome = () => {
     if (!newsDataB.response) {
       dispatch(getNewsLeftBAsync());
     }
-  }, []);
+  }, [newsData, newsDataB, dispatch]);
 
   return (
     <>

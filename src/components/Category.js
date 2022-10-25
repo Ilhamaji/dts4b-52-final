@@ -36,7 +36,7 @@ const Category = () => {
     if (!user && state.section.toLowerCase() === "sport") {
       alert("Please register or login!");
     }
-  }, []);
+  }, [user, state]);
 
   const handlePremium = (x) => {
     if (!user && x.sectionId === "sport") {

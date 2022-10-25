@@ -1,8 +1,6 @@
 import './App.css';
 import * as React from 'react';
 import Navbar from './components/Navbar';
-import Container from '@mui/material/Container';
-import { Outlet } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
 import Home from './containers/Home';
 import Detail from './components/Detail';
