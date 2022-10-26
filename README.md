@@ -4,7 +4,7 @@ DTS Final Project - Pair 52
 
 ## Link live app
 
-Deploy menggunakan netlify. [Live Url](https://dts-final-rea-b-52.netlify.app)
+Deploy menggunakan netlify. Live Url = https://dts-final-rea-b-52.netlify.app
 
 ## Tutorial
 
