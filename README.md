@@ -2,18 +2,21 @@
 
 DTS Final Project - Pair 52
 
-## Daftar pair
+## Link live app
 
-Tugas dikerjakan secara berpasangan, untuk daftar kelompok bisa dilihat pada masing-masing Classroom atau Discord Class.
+Deploy menggunakan netlify. [Live Url] (https://dts-final-rea-b-52.netlify.app)
 
-## Fork and Clone
+## Tutorial
 
-Mohon perwakilan dari pair bisa melakukan fork repo ini dan clone, untuk repositori yang di fork menggunakan penamaan:
+Video
 
-`dts4[a/b/c]-[nomor pair]-final`
+## Penjelasan
 
-Contoh: `dts4a-01-final`
+API yang digunakan diambil dari TheGuardian Open Platform, free API.
 
-## Branching, commit
-
-Branch dapat sesuai dengan kebutuhan dan kesepakatan bersama dalam pair, namun hasil akhirnya harus di merge ke branch `main` dan di push ke Github. Pastikan hasil akhir kode sudah ter-push!
+Fitur yang terdapat di dalam aplikasi ini meliputi:
+- halaman login
+- register
+- forgot password
+- halaman detail artikel
+- halaman kategori :point_right: didalamnya terdapat fitur untuk sorting
