@@ -9,6 +9,7 @@ Deploy menggunakan netlify. Live Url = https://dts-final-rea-b-52.netlify.app
 ## Tutorial
 
 ![video](finalproject.gif)
+![ezgif-4-61baf8f99b (1)](https://user-images.githubusercontent.com/44431153/198049393-c9d8fab5-26c1-4b47-9290-2ab48d4d0fec.gif)
 
 ## Penjelasan
 
