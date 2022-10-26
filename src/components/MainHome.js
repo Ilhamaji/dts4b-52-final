@@ -20,8 +20,6 @@ import {
 } from "../features/NewsSlice";
 
 import Container from "@mui/material/Container";
-import LeftHome from "./LeftHome";
-import RightHome from "./RightHome";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const MainHome = () => {
@@ -32,14 +30,9 @@ const MainHome = () => {
   const premiumData = useSelector(selectMainPremium);
 
   useEffect(() => {
-    if (!newsData.response) {
-      dispatch(getNewsMainAsync());
-    }
-
-    if (premiumData.length === 0) {
-      dispatch(getMainPremiumAsync());
-    }
-  }, [newsData, premiumData, dispatch]);
+    dispatch(getNewsMainAsync());
+    dispatch(getMainPremiumAsync());
+  }, [dispatch]);
 
   const handleDetail = (x) => {
     if (!user && x.sectionId === "sport") {
@@ -76,7 +69,7 @@ const MainHome = () => {
               blockSize: "fit-content",
             }}
           >
-            Sports New Premium
+            Sports News Premium
           </Typography>
         </Container>
         <Container sx={{ my: 2 }} fixed>
@@ -93,14 +86,14 @@ const MainHome = () => {
               }}
             >
               <CardActionArea
-                sx={{ bgcolor: "#000", color: "#fff" }}
+                sx={{ bgcolor: "#000242", color: "#fff" }}
                 onClick={() => {
                   handleDetail(premiumData.results[0]);
                 }}
               >
                 <CardMedia
                   component="img"
-                  height="140"
+                  height="350"
                   image={premiumData.results[0].fields.thumbnail}
                   alt={premiumData.results[0].webTitle}
                 />
@@ -115,7 +108,7 @@ const MainHome = () => {
               </CardActionArea>
             </Card>
           ) : (
-            <CircularProgress sx={{ color: "#000" }} />
+            <CircularProgress sx={{ color: "#000242" }} />
           )}
         </Container>
       </Box>
@@ -170,9 +163,6 @@ const MainHome = () => {
           )}
         </Container>
       </Box>
-
-      <LeftHome />
-      <RightHome />
     </React.Fragment>
   );
 };

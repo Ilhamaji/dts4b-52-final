@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState} from "react";
-import { Box, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
+import { Box, AppBar, Toolbar, IconButton, Button } from '@mui/material';
 import { ExitToApp, AccountCircle } from '@mui/icons-material';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
@@ -37,10 +37,20 @@ function Navbar() {
     if(!user && x.toLowerCase()==='sports'){
       alert("Please register or login!");
     }else{
+      setOpen(false);
       dispatch(getCategoryAsync(x.toLowerCase()));
-      navigate('/category', { state: { section: x }, replace: true });
+      navigate({
+        pathname: '/category',
+        search: '?section='+x,
+      }, {replace: true});
+      /* navigate('/category', { state: { section: x }, replace: true }); */
     }
   };
+
+  const handleHome = () => {
+    navigate("/", {replace: true});
+    setOpen(false);
+  }
 
   const [open, setOpen] = useState(false);
   const handleList = () => {
@@ -60,55 +70,27 @@ function Navbar() {
           position="static"
         >
           <Toolbar>
-            <Box
+            <Button
+              variant="contained"
               sx={{
-                xs: "none",
-                sm: "block",
+                mt: 3,
+                pr: 3,
+                bgcolor: "#000",
+                "&:hover": { bgcolor: "#444" },
               }}
+              onClick={handleHome}
             >
-              <Typography
-                noWrap
-                component="div"
-                sx={{
-                  fontSize: "16px",
-                  backgroundColor: "#000",
-                  color: "irenhite",
-                  width: "WrapText",
-                  padding: 1,
-                  borderRadius: 1.5,
-                  display: "inline-flex",
-                  fontFamily: "Playfair Display",
-                }}
-              >
-                News
-              </Typography>
-              <Typography
-                noWrap
-                component="div"
-                sx={{
-                  marginLeft: 1,
-                  fontSize: "16px",
-                  color: "#000",
-                  display: "inline-flex",
-                  fontFamily: "Playfair Display",
-                }}
-              >
-                Portal
-              </Typography>
-            </Box>
-            <IconButton sx={{ mr: 0, ml: "auto", color: "#000" }}>
-              {user ? (
-                <IconButton size="large" color="inherit">
-                  <ExitToApp onClick={onLogout} />
-                </IconButton>
-              ) : (
-                <IconButton size="large" color="inherit">
-                  <AccountCircle
-                    onClick={() => navigate("/login", { replace: true })}
-                  />
-                </IconButton>
-              )}
+              <b>News Portal</b>
+            </Button>
+            {user ? 
+            <IconButton sx={{ mr: 0, ml: "auto", color: "#000" }} onClick={onLogout}>
+              <ExitToApp />
+            </IconButton> : 
+            <IconButton sx={{ mr: 0, ml: "auto", color: "#000" }} onClick={() => navigate("/login", { replace: true })}>
+                <AccountCircle/>
             </IconButton>
+            }
+            
             <IconButton
               onClick={handleList}
               size="large"
@@ -133,11 +115,11 @@ function Navbar() {
           >
             <Collapse in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-              <ListItemButton>
-                    <ListItemText primary="Home" onClick={()=>navigate("/")} />
-                  </ListItemButton>
+                <ListItemButton onClick={handleHome}>
+                  <ListItemText primary="Home" />
+                </ListItemButton>
                 {pages.map((page) => (
-                  <ListItemButton onClick={() => handleClick(page)}>
+                  <ListItemButton key={'section_'+page} onClick={() => handleClick(page)}>
                     <ListItemText primary={page} onClick={handleList} />
                   </ListItemButton>
                 ))}

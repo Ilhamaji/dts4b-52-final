@@ -1,8 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../config/firebase";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
@@ -12,42 +10,21 @@ import {
 } from "../features/NewsSlice";
 
 import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const Detail = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { state } = useLocation();
-  const [user] = useAuthState(auth);
   const detailData = useSelector(selectDetail);
   const pesanDetail = useSelector(selectPesanDetail);
 
-  dispatch(getDetailAsync(state.apiUrl));
-
   useEffect(() => {
-    if (!user && state.sectionId === "sport") {
-      alert("Please register or login!");
-    }
-  }, [user, dispatch, state]);
+    dispatch(getDetailAsync(state.apiUrl));
+  }, [dispatch, state.apiUrl]);
 
   return (
     <Container sx={{ textAlign: "left" }} fixed>
       <Container fixed>
-        <Button
-          variant="contained"
-          sx={{
-            mt: 3,
-            pr: 3,
-            bgcolor: "#000",
-            "&:hover": { bgcolor: "#444" },
-          }}
-          onClick={() => navigate("/")}
-        >
-          <ArrowBackIcon />
-          <b>Back to Home</b>
-        </Button>
         <Box
           sx={{
             bgcolor: "#000",

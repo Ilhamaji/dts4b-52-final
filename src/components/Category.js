@@ -10,11 +10,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../config/firebase";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+//import { useEffect } from "react";
 import {
   selectCategory,
   sortCategory,
@@ -25,18 +25,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 const Category = () => {
   const navigate = useNavigate();
-  const { state } = useLocation();
   const [user] = useAuthState(auth);
   const dispatch = useDispatch();
   const [queryParams, setQueryParams] = useSearchParams();
   const categoryData = useSelector(selectCategory);
   const [sortValue, setSortValue] = useState("");
-
-  useEffect(() => {
-    if (!user && state.section.toLowerCase() === "sport") {
-      alert("Please register or login!");
-    }
-  }, [user, state]);
 
   const handlePremium = (x) => {
     if (!user && x.sectionId === "sport") {
@@ -51,9 +44,6 @@ const Category = () => {
 
   const setSortParam = (type) => {
     setSortValue(type);
-    if (state) {
-      queryParams.set("section", state.section);
-    }
     queryParams.set("sort", type);
     setQueryParams(queryParams);
     dispatch(sortCategory(queryParams.get("sort")));
@@ -77,12 +67,7 @@ const Category = () => {
                 blockSize: "fit-content",
               }}
             >
-              {queryParams.get("section")
-                ? queryParams.get("section")
-                : state.section
-                ? state.section
-                : ""}{" "}
-              Page
+              {queryParams.get("section") ? queryParams.get("section") : ""}{" "} Page
             </Typography>
           </center>
 

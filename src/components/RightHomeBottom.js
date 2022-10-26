@@ -9,21 +9,20 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
-  getNewsRightAsync,
-  selectRightNews,
+  getNewsRightBAsync,
+  selectRightBNews,
 } from "../features/NewsSlice";
 import { useNavigate } from "react-router-dom";
-
 import Container from "@mui/material/Container";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const RightHome = () => {
+const RightHomeBottom = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const newsData = useSelector(selectRightNews);
+  const newsDataB = useSelector(selectRightBNews);
 
   useEffect(() => {
-    dispatch(getNewsRightAsync());
+    dispatch(getNewsRightBAsync());
   }, [dispatch]);
 
   const handleDetail = (x) => {
@@ -50,22 +49,22 @@ const RightHome = () => {
             px: 2,
             py: 1,
             borderRadius: 2,
-            bgcolor: "#000242",
+            bgcolor: "#000",
             color: "#fff",
             width: "fit-content",
             blockSize: "fit-content",
           }}
         >
-          Politics
+          Business
         </Typography>
       </Container>
-      {!newsData.response ? (
+      {!newsDataB.response ? (
         <CircularProgress sx={{ color: "#000" }} />
       ) : (
-        newsData.response.results.map((article) => (
+        newsDataB.response.results.map((article) => (
           <Card key={article.id} sx={responsive}>
             <CardActionArea
-              sx={{ bgcolor: "#000242", color: "#fff" }}
+              sx={{ bgcolor: "#000", color: "#fff" }}
               onClick={() => { handleDetail(article); }}
             >
               <CardMedia
@@ -90,4 +89,4 @@ const RightHome = () => {
   );
 };
 
-export default RightHome;
+export default RightHomeBottom;

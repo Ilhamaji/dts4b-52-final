@@ -14,19 +14,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/detail" element={<Detail />} />
         <Route path="/category" element={<Category />} />
-            {/* <Route path="private" element={
-              <ProtectedRoute>
-                <div>ini rahasia</div>
-              </ProtectedRoute>} />
-              <Route path="login" element={
-                <ProtectedRoute loginOnly={false}>
-                  <Login />
-                </ProtectedRoute>} />
-              <Route path="register" element={
-                <ProtectedRoute loginOnly={false}>
-                  <Register />
-                </ProtectedRoute>} />
-              <Route path="*" element={<NoMatch />} /> */}
         </Routes>
     </div>
   );
